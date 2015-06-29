@@ -18,7 +18,7 @@ class Bootstrap extends Yaf_Bootstrap_Abstract {
     public function _initLoader(){
         $loader = Yaf_loader::getInstance();
         $loader->registerLocalNamespace(array(
-            'Db', 'Model'
+            'Db', 'Model', 'View'
         ));
         //$loader->import(APP_PATH.'helpers/function.php');
     }
