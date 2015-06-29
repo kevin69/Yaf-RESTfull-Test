@@ -14,4 +14,13 @@ class Bootstrap extends Yaf_Bootstrap_Abstract {
         Yaf_Registry::set('_config', Yaf_Application::app()->getConfig());
     }
 
+    // 加载本地library
+    public function _initLoader(){
+        $loader = Yaf_loader::getInstance();
+        $loader->registerLocalNamespace(array(
+            'Db', 'Model'
+        ));
+        //$loader->import(APP_PATH.'helpers/function.php');
+    }
+
 }
