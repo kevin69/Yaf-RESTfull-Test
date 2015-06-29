@@ -6,14 +6,22 @@
  * Time: 15:00
  */
 
-class IndexController extends Yaf_Controller_Abstract {
+class IndexController extends Controller {
 
     protected function init(){
-
+        parent::init();
     }
 
-    public function indexAction(){
+    public function indexGetAction(){
         echo 'Hello world';
+    }
+
+    public function indexPostAction(){
+        echo 'Hello world Post';
+    }
+
+    public function testGetAction(){
+        $this->responseSuccess('Hello world');
     }
 
 }

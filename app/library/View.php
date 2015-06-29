@@ -28,7 +28,7 @@ class View extends Yaf_View_Simple {
             }
         }
         $config         = Yaf_Application::app()->getConfig();
-        $dispatcher     = Yaf_Dispathcer::getInstance();
+        $dispatcher     = Yaf_Dispatcher::getInstance();
         $this->fileType = $config->application->view->ext;
         $request        = $dispatcher->getRequest();
         $module         = strtolower($request->module);
@@ -38,7 +38,7 @@ class View extends Yaf_View_Simple {
             // view里的display|render的时候，后缀名给丢了，这边给补回来
             $tpl        .= '.'.$this->fileType;
         }
-        if ($searchSlash !== FALES){
+        if ($searchSlash !== FALSE){
             // 出现这种情况的时候表示，调用display|render的时候用的是/作为开头的，模板的查找路径顺序为
             // /modules/{modules}/views/
             // /views/
@@ -47,7 +47,7 @@ class View extends Yaf_View_Simple {
                 APP_PATH.'modules/'.$module.'/views/',
                 APP_PATH.'views/'
             );
-            $path       = $this->returnExistFile($pathArray, $tpl);
+            $path       = $this->_returnExistsFile($pathArray, $tpl);
             if ($path === FALSE){
                 throw new Exception('Failed opening template', YAF_ERR_NOTFOUND_VIEW);
             }
@@ -80,7 +80,7 @@ class View extends Yaf_View_Simple {
         }
     }
 
-    private function returnExistsFile($pathArray, &$tpl, $controller=''){
+    private function _returnExistsFile($pathArray, &$tpl, $controller=''){
         foreach ($pathArray as $v){
             if (file_exists($v.$tpl)){
                 return $v;
