@@ -25,23 +25,26 @@ class Controller extends Yaf_Controller_Abstract {
             // 兼容原方法，如果已经存在xxxAction的时候直接调用，不再进行RESTful，否则ErrorController与forward的时候会出错
             return;
         }
-        if ($method == 'OPTIONS'){
-            $allow      = array();
-            foreach (array('Get', 'Post', 'Put', 'Delete', 'Head', 'Patch') as $v){
-                if (method_exists($this, $action.$v.'Action')){
-                    $allow[]    = $v;
-                }
+        $allow          = array();
+        foreach (array('Get', 'Post', 'Put', 'Delete', 'Head', 'Patch') as $v){
+            if (method_exists($this, $action.$v.'Action')){
+                $allow[]    = $v;
             }
-            if (!empty($allow)){
-                header('allow: '.strtoupper(implode(' ', $allow)));
-                header('content-length: 0');
-                exit();
-            }else {
+        }
+        if (empty($allow)){
+            throw new Exception('', 404);
+        }
+        if ($method == 'OPTIONS'){
+            header('allow: '.strtoupper(implode(' ', $allow)));
+            header('content-length: 0');
+            exit();
+        }else {
+            $camelMethod    = substr($method, 0, 1).strtolower(substr($method, 1));
+            if (!in_array($camelMethod, $allow)){
                 throw new Exception('', 405);
             }
-        }else {
             // 重新定位到RESTful对应的action上，比如POST方式请求index，则从indexAction变成indexPostAction
-            $this->_request->setActionName($action.substr($method, 0, 1).strtolower(substr($method, 1)));
+            $this->_request->setActionName($action.$camelMethod);
         }
     }
 
